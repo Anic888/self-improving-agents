@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "updated": "2026-01-01",
+  "comment": "Copy this to ~/.claude/self-improving/config/dependencies-watchlist.json and edit. Set 'active': false to skip without removing.",
+  "projects": [
+    {
+      "name": "my-web-app",
+      "path": "/absolute/path/to/your/web/project",
+      "manifests": ["package.json"],
+      "ecosystem": "npm",
+      "priority": "high",
+      "active": true
+    },
+    {
+      "name": "my-api",
+      "path": "/absolute/path/to/your/python/project",
+      "manifests": ["requirements.txt"],
+      "ecosystem": "pip",
+      "priority": "medium",
+      "active": true
+    },
+    {
+      "name": "my-rust-tool",
+      "path": "/absolute/path/to/your/rust/project",
+      "manifests": ["Cargo.toml"],
+      "ecosystem": "cargo",
+      "priority": "low",
+      "active": false
+    }
+  ],
+  "extra_packages": {
+    "comment": "Direct package monitoring outside any specific project.",
+    "npm": [],
+    "pip": [],
+    "cargo": []
+  }
+}

@@ -1,0 +1,20 @@
+# Local state — never committed
+*.bak
+*.log
+
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python (if anyone adds .py helpers)
+__pycache__/
+*.pyc
+
+# Node (if anyone adds JS helpers)
+node_modules/

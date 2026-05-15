@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template — install.sh substitutes {{ HOME }} and {{ CLAUDE_BIN }} with actual paths,
+  then writes the result to ~/Library/LaunchAgents/com.self-improving.weekly-recatalog.plist
+  and bootstraps it with launchctl.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.self-improving.weekly-recatalog</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ CLAUDE_BIN }}</string>
+        <string>-p</string>
+        <string>--max-budget-usd</string>
+        <string>1.00</string>
+        <string>Run the self-improving-meta-learn skill. Concretely: (1) shasum {{ HOME }}/.claude/self-improving/data/meta-failures.md before; (2) dispatch the self-improving-failure-extractor subagent (defined at {{ HOME }}/.claude/agents/self-improving-failure-extractor.md) to refresh the catalog, reading all *.md files in {{ HOME }}/.claude/self-improving/sources/, deduping against the current catalog, citing source filename + verbatim excerpt for every pattern; (3) shasum after, compare, report N added / M updated / K rejected; (4) if 0 new + 0 updated: say so plainly.</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>0</integer>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>{{ HOME }}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>{{ HOME }}</string>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>{{ HOME }}</string>
+
+    <key>StandardOutPath</key>
+    <string>{{ HOME }}/.claude/self-improving/logs/weekly-recatalog.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>{{ HOME }}/.claude/self-improving/logs/weekly-recatalog.err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
