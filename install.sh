@@ -72,6 +72,10 @@ cp "$REPO_ROOT/skills/cve-digest.md"         "$CLAUDE_DIR/skills/self-improving-
 echo "[4/7] Installing data templates (only if missing)..."
 [ -f "$INSTALL_DIR/data/meta-failures.md" ] || cp "$REPO_ROOT/templates/meta-failures.md" "$INSTALL_DIR/data/meta-failures.md"
 [ -f "$INSTALL_DIR/config/dependencies-watchlist.json" ] || cp "$REPO_ROOT/templates/dependencies-watchlist.example.json" "$INSTALL_DIR/config/dependencies-watchlist.json"
+# Email config is opt-in — install example only if user hasn't created either form yet.
+if [ ! -f "$INSTALL_DIR/config/email.json" ] && [ ! -f "$INSTALL_DIR/config/email.example.json" ]; then
+  cp "$REPO_ROOT/templates/email.example.json" "$INSTALL_DIR/config/email.example.json"
+fi
 
 # --- 5. run hook tests ---
 echo "[5/7] Running hook test suite..."
@@ -156,6 +160,8 @@ echo ""
 echo "Next steps:"
 echo "  1. Edit  $INSTALL_DIR/config/dependencies-watchlist.json  with your projects."
 echo "  2. Drop notes into  $INSTALL_DIR/sources/  for the failure-extractor to mine."
-echo "  3. Try a manual run:  /self-improving-cve-digest   or   /self-improving-meta-learn"
+echo "  3. (Optional) Set up email delivery — see README \xc2\xa7 Email notifications,"
+echo "     or copy  $INSTALL_DIR/config/email.example.json  to  email.json  and fill in."
+echo "  4. Try a manual run:  /self-improving-cve-digest   or   /self-improving-meta-learn"
 echo ""
 echo "Uninstall any time:  sh $REPO_ROOT/uninstall.sh"

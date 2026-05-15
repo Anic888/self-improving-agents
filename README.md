@@ -180,6 +180,32 @@ The scanner queries [GitHub Security Advisories](https://github.com/advisories) 
 
 Manual run: `/self-improving-cve-digest`. Daily cron run: see [Scheduling](#-scheduling).
 
+### 📧 Email notifications (optional)
+
+If you want the digest delivered to your inbox — useful when the daily cron fires while you're away from your machine — drop a config file at `~/.claude/self-improving/config/email.json`:
+
+```sh
+cp templates/email.example.json ~/.claude/self-improving/config/email.json
+chmod 600 ~/.claude/self-improving/config/email.json
+# then edit the api_key, from, to fields
+```
+
+The scanner uses [Resend](https://resend.com) (free tier: 3000 emails/month, no credit card). Sign up, verify a sending domain, and paste the API key into `email.json`. Adjust `send_on` to filter which severity levels trigger email:
+
+```jsonc
+{
+  "provider": "resend",
+  "api_key": "re_xxxxxxxxxxxx",
+  "from": "self-improving@yourverifieddomain.com",
+  "to": "you@example.com",
+  "send_on": ["critical", "high"]   // or ["critical","high","medium","low"] for everything
+}
+```
+
+Findings below the threshold still land in the local digest file — email only carries what the threshold matches. If `email.json` is absent, email delivery is silently skipped (no error). The API key is never logged.
+
+If Resend isn't your thing: write a small wrapper that reads the digest file and pipes it through your preferred mail transport (`mailx`, `msmtp`, AWS SES, etc.). PRs adding alternate providers welcome.
+
 ---
 
 ## 🧠 Failure pattern catalog

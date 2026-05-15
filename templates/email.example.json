@@ -1,0 +1,9 @@
+{
+  "comment": "Copy this to ~/.claude/self-improving/config/email.json and fill in. chmod 600 the result. If this file is absent, the scanner silently skips email delivery.",
+  "provider": "resend",
+  "api_key": "re_XXXXXXXX_PUT_YOUR_RESEND_API_KEY_HERE",
+  "from": "self-improving@yourverifieddomain.com",
+  "to": "you@example.com",
+  "send_on": ["critical", "high"],
+  "_send_on_note": "Severities that trigger email delivery. Lower-severity findings still land in the local digest file. Set to [\"critical\",\"high\",\"medium\",\"low\"] for everything, or [\"critical\"] for paranoid-only."
+}

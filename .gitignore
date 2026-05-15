@@ -2,6 +2,11 @@
 *.bak
 *.log
 
+# Email config holds an API key — never committed even if dropped into the repo by mistake
+email.json
+config/email.json
+**/email.json
+
 # OS clutter
 .DS_Store
 Thumbs.db
