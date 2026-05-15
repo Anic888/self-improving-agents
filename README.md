@@ -1,14 +1,14 @@
 <div align="center">
 
-# 🛡️ Self-Improving Agents
+<img src="docs/images/banner.svg" alt="Self-Improving Agents — defensive automation for Claude Code" width="900"/>
 
-**Defensive automation for [Claude Code](https://claude.com/code) — block the mistakes you already learned about, before they happen again.**
-
-[![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](#install)
-[![Shell](https://img.shields.io/badge/shell-POSIX_sh-blue.svg)](#hooks)
+[![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](#-quick-start)
+[![Shell](https://img.shields.io/badge/shell-POSIX_sh-blue.svg)](#%EF%B8%8F-hooks-in-detail)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-required-7C3AED.svg)](https://claude.com/code)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-beta-orange.svg)](#)
+
+**Block the mistakes you already learned about — before they happen again.**
 
 </div>
 
@@ -27,6 +27,12 @@ Memory files document those mistakes, but memory is *passive* — the model can 
 │  Hook:    "Don't do X."   →   Tool call BLOCKED at exit 2.    │
 └───────────────────────────────────────────────────────────────┘
 ```
+
+<div align="center">
+  <img src="docs/images/hook-in-action.svg" alt="Terminal showing a blocked git commit attempt" width="800"/>
+  <br/>
+  <sub><i>Hook intercepting an attempt to bypass pre-commit checks.</i></sub>
+</div>
 
 ---
 
@@ -72,6 +78,26 @@ flowchart LR
 | **🧠 Pattern catalog** | YAML-in-Markdown registry of failure patterns, each cited from a real source note. | Read by hooks (which knows their pattern ID) |
 | **🔍 Failure extractor** | Subagent that mines your notes and updates the catalog. Cite-or-reject discipline. | On demand via `/self-improving-meta-learn`, or weekly cron |
 | **🔍 CVE scanner** | Subagent that queries GitHub Security Advisories for your dependencies, writes a daily digest. | On demand via `/self-improving-cve-digest`, or daily cron |
+
+### Pattern lifecycle
+
+```mermaid
+sequenceDiagram
+    participant Notes as 📝 Your notes
+    participant Extractor as 🔍 failure-extractor
+    participant Catalog as 🧠 meta-failures.md
+    participant Hook as 🛡️ PreToolUse hook
+    participant Claude as 🤖 Claude Code
+
+    Notes->>Extractor: weekly cron / manual
+    Extractor->>Catalog: append pattern<br/>(cited evidence required)
+    Catalog-->>Hook: defense_ref points to hook script
+    Note over Hook: hook is now armed
+
+    Claude->>Hook: attempts bad tool call
+    Hook-->>Claude: exit 2 + reason
+    Note over Claude: tool never invoked
+```
 
 ---
 
